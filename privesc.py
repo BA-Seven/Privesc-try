@@ -26,4 +26,19 @@ with open("output.txt") as f:
     data = f.readlines()
     for line,content in enumerate(data):
         if "NTDS.DIT secrets" in content:
-            print(line)
+            start = line
+        if "[*] Kerberos keys grabbed" in content:
+            end = line
+    for i in range(len(data) - end):
+        del data[end]
+    for i in range(start + 1):
+        del data[0]
+
+print("")
+print("[*] Writing hashes to hashes.txt...")
+
+with open("hashes.txt", "w") as f:
+    for i in data:
+        f.write(i)
+
+print("[*] Hashes dumped and saved in hashes.txt")
